@@ -1,9 +1,11 @@
+import os
 import time
 import oci
 from oci.exceptions import ServiceError
 
 # Load OCI configuration from default location
-config = oci.config.from_file("~/.oci/config")
+config_path = os.path.join(os.path.expanduser("~"), ".oci", "config")
+config = oci.config.from_file(config_path)
 
 compute_client = oci.core.ComputeClient(config)
 
@@ -19,7 +21,7 @@ image_id = "YOUR_IMAGE_OCID_HERE"
 instance_name = "your-instance-name"
 
 # Path to your SSH public key file
-ssh_key_path = "/path/to/your/ssh_public_key.pub"
+ssh_key_path = os.path.join(os.path.expanduser("~"), ".ssh", "id_rsa.pub") # Adjust filename if different
 
 def create_instance():
     try:
@@ -38,7 +40,7 @@ def create_instance():
                 subnet_id="YOUR_SUBNET_OCID_HERE"  # Replace with your subnet OCID
             ),
             metadata={
-                "ssh_authorized_keys": open(ssh_key_path, "r").read()
+                "ssh_authorized_keys": open(ssh_key_path, "r", encoding="utf-8").read()
             }
         )
 
