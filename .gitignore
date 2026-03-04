@@ -1,3 +1,3 @@
 venv/
-python.py
-scriptused.py
+__pycache__/
+.env
